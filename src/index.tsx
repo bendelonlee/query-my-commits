@@ -3,9 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import graphql from 'babel-plugin-relay/macro';
-import { QueryRenderer } from 'react-relay'
-
 
 ReactDOM.render(
   <React.StrictMode>
