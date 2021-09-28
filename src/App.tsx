@@ -5,25 +5,30 @@ import {
   RelayEnvironmentProvider,
   loadQuery,
   usePreloadedQuery,
+  
 } from 'react-relay/hooks';
 import RelayEnvironment from './RelayEnvironment';
 
 const { Suspense } = React;
-
+const variables = {
+  "name": "known_extents_list_view_builder",
+  "owner": "bendelonlee",
+}
 // Define a query
-const RepositoryNameQuery = graphql`
-  query AppRepositoryNameQuery {
-    repository(owner: "facebook", name: "relay") {
-      name
-    }
+const fooQuery = graphql`
+query AppFooQuery($name: String!, $owner: String!) { 
+  repository(name: $name, owner: $owner) { 
+    name
   }
-`;
+}
+`
+
 
 // Immediately load the query as our app starts. For a real app, we'd move this
 // into our routing configuration, preloading data as we transition to new routes.
-const preloadedQuery = loadQuery(RelayEnvironment, RepositoryNameQuery, {
-  /* query variables */
-});
+const preloadedQuery = loadQuery(RelayEnvironment, fooQuery, 
+  variables
+);
 
 // Inner component that reads the preloaded query results via `usePreloadedQuery()`.
 // This works as follows:
@@ -34,12 +39,12 @@ const preloadedQuery = loadQuery(RelayEnvironment, RepositoryNameQuery, {
 // - If the query failed, it throws the failure error. For simplicity we aren't
 //   handling the failure case here.
 function App(props : any) {
-  const data : any = usePreloadedQuery(RepositoryNameQuery, props.preloadedQuery);
-
+  const data : any = usePreloadedQuery(fooQuery, props.preloadedQuery,);
+  console.log(data)
   return (
     <div className="App">
       <header className="App-header">
-        <p>{data.repository.name}</p>
+        {/* {data.repository.defaultBranchRef.target} */}
       </header>
     </div>
   );

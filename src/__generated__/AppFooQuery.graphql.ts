@@ -3,22 +3,28 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type AppRepositoryNameQueryVariables = {};
-export type AppRepositoryNameQueryResponse = {
+export type AppFooQueryVariables = {
+    name: string;
+    owner: string;
+};
+export type AppFooQueryResponse = {
     readonly repository: {
         readonly name: string;
     } | null;
 };
-export type AppRepositoryNameQuery = {
-    readonly response: AppRepositoryNameQueryResponse;
-    readonly variables: AppRepositoryNameQueryVariables;
+export type AppFooQuery = {
+    readonly response: AppFooQueryResponse;
+    readonly variables: AppFooQueryVariables;
 };
 
 
 
 /*
-query AppRepositoryNameQuery {
-  repository(owner: "facebook", name: "relay") {
+query AppFooQuery(
+  $name: String!
+  $owner: String!
+) {
+  repository(name: $name, owner: $owner) {
     name
     id
   }
@@ -28,17 +34,29 @@ query AppRepositoryNameQuery {
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
-    "kind": "Literal",
-    "name": "name",
-    "value": "relay"
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "name"
   },
   {
-    "kind": "Literal",
-    "name": "owner",
-    "value": "facebook"
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "owner"
   }
 ],
-v1 = {
+v1 = [
+  {
+    "kind": "Variable",
+    "name": "name",
+    "variableName": "name"
+  },
+  {
+    "kind": "Variable",
+    "name": "owner",
+    "variableName": "owner"
+  }
+],
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -47,22 +65,22 @@ v1 = {
 };
 return {
   "fragment": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "AppRepositoryNameQuery",
+    "name": "AppFooQuery",
     "selections": [
       {
         "alias": null,
-        "args": (v0/*: any*/),
+        "args": (v1/*: any*/),
         "concreteType": "Repository",
         "kind": "LinkedField",
         "name": "repository",
         "plural": false,
         "selections": [
-          (v1/*: any*/)
+          (v2/*: any*/)
         ],
-        "storageKey": "repository(name:\"relay\",owner:\"facebook\")"
+        "storageKey": null
       }
     ],
     "type": "Query",
@@ -70,19 +88,19 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "AppRepositoryNameQuery",
+    "name": "AppFooQuery",
     "selections": [
       {
         "alias": null,
-        "args": (v0/*: any*/),
+        "args": (v1/*: any*/),
         "concreteType": "Repository",
         "kind": "LinkedField",
         "name": "repository",
         "plural": false,
         "selections": [
-          (v1/*: any*/),
+          (v2/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -91,19 +109,19 @@ return {
             "storageKey": null
           }
         ],
-        "storageKey": "repository(name:\"relay\",owner:\"facebook\")"
+        "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "91a2d37a28396eb1d7dcf20cc01b3d0d",
+    "cacheID": "a9eb68da40e387113f95e3061c161ddb",
     "id": null,
     "metadata": {},
-    "name": "AppRepositoryNameQuery",
+    "name": "AppFooQuery",
     "operationKind": "query",
-    "text": "query AppRepositoryNameQuery {\n  repository(owner: \"facebook\", name: \"relay\") {\n    name\n    id\n  }\n}\n"
+    "text": "query AppFooQuery(\n  $name: String!\n  $owner: String!\n) {\n  repository(name: $name, owner: $owner) {\n    name\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '9f041295559a43de4cee97435d379fd0';
+(node as any).hash = '8336e346b6295089c16ac2c95bc195cb';
 export default node;
