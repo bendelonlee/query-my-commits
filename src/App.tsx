@@ -13,12 +13,33 @@ const { Suspense } = React;
 const variables = {
   "name": "known_extents_list_view_builder",
   "owner": "bendelonlee",
+  "authorId": "MDQ6VXNlcjQxNjQ1Nzcx",
+  "after": "63bad50635329c0c9905cd6f4be6d40f66dbd2c4 8"
 }
 // Define a query
 const fooQuery = graphql`
-query AppFooQuery($name: String!, $owner: String!) { 
-  repository(name: $name, owner: $owner) { 
-    name
+query AppCommitsQuery($name: String!, $owner: String!, $authorId: ID!, $after: String) {
+  repository(name: $name, owner: $owner) {
+    defaultBranchRef {
+      target {
+        ... on Commit {
+          history(first: 9, author: {id: $authorId}, after: $after) {
+            nodes {
+              message
+              messageBody
+              id
+            }
+            pageInfo {
+                
+              hasNextPage
+              hasPreviousPage
+              endCursor
+            }
+            totalCount
+          }
+        }
+      }
+    }
   }
 }
 `
@@ -40,11 +61,15 @@ const preloadedQuery = loadQuery(RelayEnvironment, fooQuery,
 //   handling the failure case here.
 function App(props : any) {
   const data : any = usePreloadedQuery(fooQuery, props.preloadedQuery,);
-  console.log(data)
+  const commits = data.repository.defaultBranchRef.target.history.nodes;
   return (
     <div className="App">
       <header className="App-header">
-        {/* {data.repository.defaultBranchRef.target} */}
+        {commits.map((commits : any)=>{
+          return <p>
+            {commits.message}
+          </p> 
+        })}
       </header>
     </div>
   );
