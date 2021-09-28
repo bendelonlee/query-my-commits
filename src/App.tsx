@@ -14,10 +14,10 @@ function App() {
   useEffect(() => {
     let isMounted = true;
     fetchGraphQL(`
-      query RepositoryNameQuery {
+      query LoggedInViewerName {
         # feel free to change owner/name here
-        repository(owner: "facebook" name: "relay") {
-          name
+        viewer {
+          login
         }
       }
     `).then(response => {
@@ -26,7 +26,7 @@ function App() {
         return;
       }
       const data = response.data;
-      setName(data.repository.name);
+      setName(data.viewer.login);
     }).catch(error => {
       console.error(error);
     });
