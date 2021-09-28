@@ -8,6 +8,7 @@ import {
   
 } from 'react-relay/hooks';
 import RelayEnvironment from './RelayEnvironment';
+import CommitData from './CommitData';
 
 const { Suspense } = React;
 const variables = {
@@ -23,11 +24,11 @@ query AppCommitsQuery($name: String!, $owner: String!, $authorId: ID!, $after: S
     defaultBranchRef {
       target {
         ... on Commit {
-          history(first: 9, author: {id: $authorId}, after: $after) {
+          history(first: 3, author: {id: $authorId}, after: $after) {
             nodes {
               message
               messageBody
-              id
+              oid
             }
             pageInfo {
                 
@@ -62,6 +63,9 @@ const preloadedQuery = loadQuery(RelayEnvironment, fooQuery,
 function App(props : any) {
   const data : any = usePreloadedQuery(fooQuery, props.preloadedQuery,);
   const commits = data.repository.defaultBranchRef.target.history.nodes;
+  const commitData = new CommitData();
+  commitData.addCommits(commits, 'fooId')
+  console.log(commitData.wordFrequencies);
   return (
     <div className="App">
       <header className="App-header">

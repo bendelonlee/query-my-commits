@@ -17,7 +17,7 @@ export type AppCommitsQueryResponse = {
                     readonly nodes: ReadonlyArray<{
                         readonly message: string;
                         readonly messageBody: string;
-                        readonly id: string;
+                        readonly oid: unknown;
                     } | null> | null;
                     readonly pageInfo: {
                         readonly hasNextPage: boolean;
@@ -49,10 +49,11 @@ query AppCommitsQuery(
       target {
         __typename
         ... on Commit {
-          history(first: 9, author: {id: $authorId}, after: $after) {
+          history(first: 3, author: {id: $authorId}, after: $after) {
             nodes {
               message
               messageBody
+              oid
               id
             }
             pageInfo {
@@ -105,117 +106,95 @@ v4 = [
     "variableName": "owner"
   }
 ],
-v5 = {
+v5 = [
+  {
+    "kind": "Variable",
+    "name": "after",
+    "variableName": "after"
+  },
+  {
+    "fields": [
+      {
+        "kind": "Variable",
+        "name": "id",
+        "variableName": "authorId"
+      }
+    ],
+    "kind": "ObjectValue",
+    "name": "author"
+  },
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 3
+  }
+],
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "message",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "messageBody",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "oid",
+  "storageKey": null
+},
+v9 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "PageInfo",
+  "kind": "LinkedField",
+  "name": "pageInfo",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "hasNextPage",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "hasPreviousPage",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "endCursor",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v10 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "totalCount",
+  "storageKey": null
+},
+v11 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
-},
-v6 = {
-  "kind": "InlineFragment",
-  "selections": [
-    {
-      "alias": null,
-      "args": [
-        {
-          "kind": "Variable",
-          "name": "after",
-          "variableName": "after"
-        },
-        {
-          "fields": [
-            {
-              "kind": "Variable",
-              "name": "id",
-              "variableName": "authorId"
-            }
-          ],
-          "kind": "ObjectValue",
-          "name": "author"
-        },
-        {
-          "kind": "Literal",
-          "name": "first",
-          "value": 9
-        }
-      ],
-      "concreteType": "CommitHistoryConnection",
-      "kind": "LinkedField",
-      "name": "history",
-      "plural": false,
-      "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "concreteType": "Commit",
-          "kind": "LinkedField",
-          "name": "nodes",
-          "plural": true,
-          "selections": [
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "message",
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "messageBody",
-              "storageKey": null
-            },
-            (v5/*: any*/)
-          ],
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "concreteType": "PageInfo",
-          "kind": "LinkedField",
-          "name": "pageInfo",
-          "plural": false,
-          "selections": [
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "hasNextPage",
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "hasPreviousPage",
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "endCursor",
-              "storageKey": null
-            }
-          ],
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "totalCount",
-          "storageKey": null
-        }
-      ],
-      "storageKey": null
-    }
-  ],
-  "type": "Commit",
-  "abstractKey": null
 };
 return {
   "fragment": {
@@ -253,7 +232,40 @@ return {
                 "name": "target",
                 "plural": false,
                 "selections": [
-                  (v6/*: any*/)
+                  {
+                    "kind": "InlineFragment",
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": (v5/*: any*/),
+                        "concreteType": "CommitHistoryConnection",
+                        "kind": "LinkedField",
+                        "name": "history",
+                        "plural": false,
+                        "selections": [
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "Commit",
+                            "kind": "LinkedField",
+                            "name": "nodes",
+                            "plural": true,
+                            "selections": [
+                              (v6/*: any*/),
+                              (v7/*: any*/),
+                              (v8/*: any*/)
+                            ],
+                            "storageKey": null
+                          },
+                          (v9/*: any*/),
+                          (v10/*: any*/)
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "type": "Commit",
+                    "abstractKey": null
+                  }
                 ],
                 "storageKey": null
               }
@@ -309,30 +321,64 @@ return {
                     "name": "__typename",
                     "storageKey": null
                   },
-                  (v5/*: any*/),
-                  (v6/*: any*/)
+                  (v11/*: any*/),
+                  {
+                    "kind": "InlineFragment",
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": (v5/*: any*/),
+                        "concreteType": "CommitHistoryConnection",
+                        "kind": "LinkedField",
+                        "name": "history",
+                        "plural": false,
+                        "selections": [
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "Commit",
+                            "kind": "LinkedField",
+                            "name": "nodes",
+                            "plural": true,
+                            "selections": [
+                              (v6/*: any*/),
+                              (v7/*: any*/),
+                              (v8/*: any*/),
+                              (v11/*: any*/)
+                            ],
+                            "storageKey": null
+                          },
+                          (v9/*: any*/),
+                          (v10/*: any*/)
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "type": "Commit",
+                    "abstractKey": null
+                  }
                 ],
                 "storageKey": null
               },
-              (v5/*: any*/)
+              (v11/*: any*/)
             ],
             "storageKey": null
           },
-          (v5/*: any*/)
+          (v11/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "1d1d0dca6e585dea45cd5772eb9ec582",
+    "cacheID": "04e93e329f9e3f84d2dae6ad9fb2489a",
     "id": null,
     "metadata": {},
     "name": "AppCommitsQuery",
     "operationKind": "query",
-    "text": "query AppCommitsQuery(\n  $name: String!\n  $owner: String!\n  $authorId: ID!\n  $after: String\n) {\n  repository(name: $name, owner: $owner) {\n    defaultBranchRef {\n      target {\n        __typename\n        ... on Commit {\n          history(first: 9, author: {id: $authorId}, after: $after) {\n            nodes {\n              message\n              messageBody\n              id\n            }\n            pageInfo {\n              hasNextPage\n              hasPreviousPage\n              endCursor\n            }\n            totalCount\n          }\n        }\n        id\n      }\n      id\n    }\n    id\n  }\n}\n"
+    "text": "query AppCommitsQuery(\n  $name: String!\n  $owner: String!\n  $authorId: ID!\n  $after: String\n) {\n  repository(name: $name, owner: $owner) {\n    defaultBranchRef {\n      target {\n        __typename\n        ... on Commit {\n          history(first: 3, author: {id: $authorId}, after: $after) {\n            nodes {\n              message\n              messageBody\n              oid\n              id\n            }\n            pageInfo {\n              hasNextPage\n              hasPreviousPage\n              endCursor\n            }\n            totalCount\n          }\n        }\n        id\n      }\n      id\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '714e71f5e71b4c3e3b7cb3c06527d44f';
+(node as any).hash = 'b98ce200f9360e6d8a52981ed3e5fe62';
 export default node;
