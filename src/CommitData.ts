@@ -1,7 +1,7 @@
 export default class CommitData {
-    wordFrequencies : {[name: string]: number} = {};
-    lastRepoCommits : Map<string, string> = new Map();
-    
+    wordFrequencies: {[name: string]: number} = {};
+    lastRepoCommits: Map<string, string> = new Map();
+    removeList: Set<string> = new Set(['', 'for', 'in', 'of', 'a', 'the', 'to', 'from', 'when', 'as', 'is', 'was', 'be', 'without', 'with', 'and'])
     static fromStorage(): CommitData {
         const cd = new CommitData();
         cd.wordFrequencies = JSON.parse(localStorage.getItem('wordFrequencies')!);
@@ -30,7 +30,7 @@ export default class CommitData {
     }
 
     addWord(word : string): void {
-        if(word === '') return;
+        if(this.removeList.has(word)) return;
         word = word.toLowerCase();
         let count : number | undefined = this.wordFrequencies[word];
         if( count === undefined ) count = 0;
