@@ -1,5 +1,5 @@
 export default class CommitData {
-    wordFrequencies : Map<String, number> = new Map();
+    wordFrequencies : {[name: string]: number} = {};
     lastRepoCommits : Map<string, string> = new Map();
     
     static fromStorage(): CommitData {
@@ -17,7 +17,6 @@ export default class CommitData {
     }
 
     updateLocalStorage(): void {
-        console.log('JSON.stringify(this.wordFrequencies)', JSON.stringify(this.wordFrequencies))
         localStorage.setItem('lastRepoCommits', JSON.stringify(this.lastRepoCommits))
         localStorage.setItem('wordFrequencies', JSON.stringify(this.wordFrequencies))
     }
@@ -33,9 +32,9 @@ export default class CommitData {
     addWord(word : string): void {
         if(word === '') return;
         word = word.toLowerCase();
-        let count : number | undefined = this.wordFrequencies.get(word);
+        let count : number | undefined = this.wordFrequencies[word];
         if( count === undefined ) count = 0;
-        this.wordFrequencies.set(word, count + 1);
+        this.wordFrequencies[word] = count + 1;
     }
 }
 

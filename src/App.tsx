@@ -60,12 +60,12 @@ const preloadedQuery = loadQuery(RelayEnvironment, fooQuery,
 // - If the query failed, it throws the failure error. For simplicity we aren't
 //   handling the failure case here.
 function App(props: any) {
-  const data : any = usePreloadedQuery(fooQuery, props.preloadedQuery,)
-  const commits = data.repository.defaultBranchRef.target.history.nodes;
-  const commitData = new CommitData();
-  commitData.addCommits(commits, 'fooId', data.repository.defaultBranchRef.target.history.pageInfo.endCursor)
+  // const data : any = usePreloadedQuery(fooQuery, props.preloadedQuery,)
+  // const commits = data.repository.defaultBranchRef.target.history.nodes;
+  // const commitData = new CommitData();
+  // commitData.addCommits(commits, 'fooId', data.repository.defaultBranchRef.target.history.pageInfo.endCursor)
   
-  // const commitData = CommitData.fromStorage();
+  const commitData = CommitData.fromStorage();
   
   console.log(commitData.wordFrequencies);
   return (
