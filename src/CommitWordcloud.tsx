@@ -2,6 +2,7 @@ import CommitData from "./CommitData";
 import ReactWordcloud, { Scale } from 'react-wordcloud';
 
 import internal from "stream";
+import useWindowDimensions from "./hooks/useWindowDimensions";
 
 const callbacks = {
     
@@ -17,7 +18,7 @@ const callbacks = {
   const size: [number, number] = [1600, 1000];
    
 export default function CommitWordcloud(props: {commitData: CommitData}) {
-    
+    const {height, width} = useWindowDimensions();
     return (
       <ReactWordcloud
         callbacks={{
@@ -32,7 +33,7 @@ export default function CommitWordcloud(props: {commitData: CommitData}) {
           fontFamily: 'monospace',
           fontSizes: [10, 200]
         }}
-        size={size}
+        size={[width, height]}
         words={props.commitData.toWordCloudArray()}
       />
     );
