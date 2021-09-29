@@ -1,25 +1,36 @@
 export default class CommitData {
     wordFrequencies : Map<String, number> = new Map();
-    commits : Map<String, boolean> = new Map();
     lastRepoCommits : Map<string, string> = new Map();
-  
-    addCommits(commits : [Commit], repoId : string){
-        commits.forEach((commit)=>{
-            this.addCommit(commit, repoId);
-        })
+    
+    static fromStorage(): CommitData {
+        const cd = new CommitData();
+        cd.wordFrequencies = JSON.parse(localStorage.getItem('wordFrequencies')!);
+        return cd;
     }
-    addCommit(commit : Commit, repoId : string){
-        
-        if(this.commits.get(commit.oid) === true) return;
-        console.log("adding commit", commit)
-        this.commits.set(commit.oid, true);
-        this.lastRepoCommits.set(repoId, commit.oid) // might be better to do only if the last one
+
+    addCommits(commits : [Commit], repoId: string, endCursor: string){
+        commits.forEach((commit)=>{
+            this.addCommit(commit);
+        })
+        this.lastRepoCommits.set(repoId, endCursor) 
+        this.updateLocalStorage();
+    }
+
+    updateLocalStorage(): void {
+        console.log('JSON.stringify(this.wordFrequencies)', JSON.stringify(this.wordFrequencies))
+        localStorage.setItem('lastRepoCommits', JSON.stringify(this.lastRepoCommits))
+        localStorage.setItem('wordFrequencies', JSON.stringify(this.wordFrequencies))
+    }
+
+    addCommit(commit : Commit): void {
         this.addMessage(commit.message);
     }
-    addMessage(message : string){
+
+    addMessage(message : string): void {
         message.split(/\ |\./).forEach((word) => this.addWord(word))
     }
-    addWord(word : string){
+
+    addWord(word : string): void {
         if(word === '') return;
         word = word.toLowerCase();
         let count : number | undefined = this.wordFrequencies.get(word);

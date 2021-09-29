@@ -15,7 +15,6 @@ const variables = {
   "name": "known_extents_list_view_builder",
   "owner": "bendelonlee",
   "authorId": "MDQ6VXNlcjQxNjQ1Nzcx",
-  "after": "63bad50635329c0c9905cd6f4be6d40f66dbd2c4 8"
 }
 // Define a query
 const fooQuery = graphql`
@@ -24,7 +23,7 @@ query AppCommitsQuery($name: String!, $owner: String!, $authorId: ID!, $after: S
     defaultBranchRef {
       target {
         ... on Commit {
-          history(first: 3, author: {id: $authorId}, after: $after) {
+          history(author: {id: $authorId}, after: $after) {
             nodes {
               message
               messageBody
@@ -49,7 +48,7 @@ query AppCommitsQuery($name: String!, $owner: String!, $authorId: ID!, $after: S
 // Immediately load the query as our app starts. For a real app, we'd move this
 // into our routing configuration, preloading data as we transition to new routes.
 const preloadedQuery = loadQuery(RelayEnvironment, fooQuery, 
-  variables
+  variables,
 );
 
 // Inner component that reads the preloaded query results via `usePreloadedQuery()`.
@@ -60,20 +59,23 @@ const preloadedQuery = loadQuery(RelayEnvironment, fooQuery,
 //   fallback.
 // - If the query failed, it throws the failure error. For simplicity we aren't
 //   handling the failure case here.
-function App(props : any) {
-  const data : any = usePreloadedQuery(fooQuery, props.preloadedQuery,);
+function App(props: any) {
+  const data : any = usePreloadedQuery(fooQuery, props.preloadedQuery,)
   const commits = data.repository.defaultBranchRef.target.history.nodes;
   const commitData = new CommitData();
-  commitData.addCommits(commits, 'fooId')
+  commitData.addCommits(commits, 'fooId', data.repository.defaultBranchRef.target.history.pageInfo.endCursor)
+  
+  // const commitData = CommitData.fromStorage();
+  
   console.log(commitData.wordFrequencies);
   return (
     <div className="App">
       <header className="App-header">
-        {commits.map((commits : any)=>{
+        {/* {commits.map((commits : any)=>{
           return <p>
             {commits.message}
           </p> 
-        })}
+        })} */}
       </header>
     </div>
   );

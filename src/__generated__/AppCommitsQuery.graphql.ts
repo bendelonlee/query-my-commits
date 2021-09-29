@@ -49,7 +49,7 @@ query AppCommitsQuery(
       target {
         __typename
         ... on Commit {
-          history(first: 3, author: {id: $authorId}, after: $after) {
+          history(author: {id: $authorId}, after: $after) {
             nodes {
               message
               messageBody
@@ -122,11 +122,6 @@ v5 = [
     ],
     "kind": "ObjectValue",
     "name": "author"
-  },
-  {
-    "kind": "Literal",
-    "name": "first",
-    "value": 3
   }
 ],
 v6 = {
@@ -371,14 +366,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "04e93e329f9e3f84d2dae6ad9fb2489a",
+    "cacheID": "9eb5a613f54baa77ae49595233a7a151",
     "id": null,
     "metadata": {},
     "name": "AppCommitsQuery",
     "operationKind": "query",
-    "text": "query AppCommitsQuery(\n  $name: String!\n  $owner: String!\n  $authorId: ID!\n  $after: String\n) {\n  repository(name: $name, owner: $owner) {\n    defaultBranchRef {\n      target {\n        __typename\n        ... on Commit {\n          history(first: 3, author: {id: $authorId}, after: $after) {\n            nodes {\n              message\n              messageBody\n              oid\n              id\n            }\n            pageInfo {\n              hasNextPage\n              hasPreviousPage\n              endCursor\n            }\n            totalCount\n          }\n        }\n        id\n      }\n      id\n    }\n    id\n  }\n}\n"
+    "text": "query AppCommitsQuery(\n  $name: String!\n  $owner: String!\n  $authorId: ID!\n  $after: String\n) {\n  repository(name: $name, owner: $owner) {\n    defaultBranchRef {\n      target {\n        __typename\n        ... on Commit {\n          history(author: {id: $authorId}, after: $after) {\n            nodes {\n              message\n              messageBody\n              oid\n              id\n            }\n            pageInfo {\n              hasNextPage\n              hasPreviousPage\n              endCursor\n            }\n            totalCount\n          }\n        }\n        id\n      }\n      id\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'b98ce200f9360e6d8a52981ed3e5fe62';
+(node as any).hash = 'cbba40dc915464155f44b2ef379c4c88';
 export default node;
