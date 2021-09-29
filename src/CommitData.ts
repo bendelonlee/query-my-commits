@@ -36,9 +36,24 @@ export default class CommitData {
         if( count === undefined ) count = 0;
         this.wordFrequencies[word] = count + 1;
     }
+
+    toWordCloudArray(){
+        let result: WordCloudWord[] = [];
+        for (let word in this.wordFrequencies){
+            // let displayWord: string  = word.substr(0, 10)
+            let wcw = {text: word, value: this.wordFrequencies[word] * 10000}
+            result.push(wcw)
+        }
+        return result
+    }
 }
 
 interface Commit {
     oid : string
     message : string
+}
+
+interface WordCloudWord {
+    text: string,
+    value: number
 }

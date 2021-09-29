@@ -9,6 +9,7 @@ import {
 } from 'react-relay/hooks';
 import RelayEnvironment from './RelayEnvironment';
 import CommitData from './CommitData';
+import CommitWordcloud from './CommitWordcloud';
 
 const { Suspense } = React;
 const variables = {
@@ -70,13 +71,7 @@ function App(props: any) {
   console.log(commitData.wordFrequencies);
   return (
     <div className="App">
-      <header className="App-header">
-        {/* {commits.map((commits : any)=>{
-          return <p>
-            {commits.message}
-          </p> 
-        })} */}
-      </header>
+      <CommitWordcloud commitData={commitData}/>
     </div>
   );
 }
