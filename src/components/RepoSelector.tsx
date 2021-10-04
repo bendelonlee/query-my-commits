@@ -17,11 +17,10 @@ function RepoSelector({repoName, setRepoName}: RepoSelectorProps){
             variables={{}}
             render={({ error, props: response, retry }) => {
                 return (
-                    <InnerComponent loadingError={error} response={response} refetch={retry} />
+                    <InnerComponent loadingError={error} response={response} refetch={retry} setRepoName={setRepoName} />
                 );
             }}
         />
-        <p>{repoName}</p>
     </div>
 }
 
@@ -54,13 +53,25 @@ interface Props {
     response: Nullable<RepoSelectorQueryResponse>;
     loadingError: Nullable<Error>;
     refetch?: Nullable<() => void>;
+    setRepoName: Dispatch<SetStateAction<string>>;
 }
 type Nullable<T> = null | T;
 
 
 function InnerComponent(props: Props): JSX.Element {
-    const { response, loadingError, refetch, } = props;
-    return <div/>
+    const { response, loadingError, refetch, setRepoName } = props;
+    const repos = response?.viewer.repositories.nodes
+
+    const onRepoChange = (event: any) => {
+        setRepoName(event.target.value)
+    }
+
+    return <select onChange={onRepoChange}>
+        {repos?.map((repo) => {
+            return <option>{repo!.name}</option>
+        })}
+    </select>
+
 }
 
 
