@@ -23,7 +23,7 @@ export default function CommitWordcloud(props: {commitData: CommitData}) {
       <ReactWordcloud
         callbacks={{
           getWordTooltip: () => undefined,
-          getWordColor: (word: any) => "white"
+          getWordColor: (word: any) => ["#B4C2D6", "#BFE3DA", "#F5FCDC", "#FEFFF7", "#C0DDBE"][Math.floor(Math.random() * 5)]
         }}
         options={{
           

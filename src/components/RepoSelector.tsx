@@ -2,7 +2,7 @@ import { graphql } from "babel-plugin-relay/macro"
 import { Dispatch, SetStateAction } from "react"
 import { QueryRenderer } from "react-relay"
 import RelayEnvironment from "../RelayEnvironment"
-import { RepoSelectorQuery } from "./__generated__/RepoSelectorQuery.graphql"
+import { RepoSelectorQuery, RepoSelectorQueryResponse } from "./__generated__/RepoSelectorQuery.graphql"
 
 export interface RepoSelectorProps {
     repoName: string;
@@ -10,14 +10,14 @@ export interface RepoSelectorProps {
 }
 
 function RepoSelector({repoName, setRepoName}: RepoSelectorProps){
-    return <div>    
+    return <div>
         <QueryRenderer<RepoSelectorQuery>
             environment={RelayEnvironment}
             query={reposQuery}
             variables={{}}
             render={({ error, props: response, retry }) => {
                 return (
-                  <p>repos</p>
+                    <InnerComponent loadingError={error} response={response} refetch={retry} />
                 );
             }}
         />
@@ -49,6 +49,19 @@ query RepoSelectorQuery {
         }
 }
 `
+
+interface Props {
+    response: Nullable<RepoSelectorQueryResponse>;
+    loadingError: Nullable<Error>;
+    refetch?: Nullable<() => void>;
+}
+type Nullable<T> = null | T;
+
+
+function InnerComponent(props: Props): JSX.Element {
+    const { response, loadingError, refetch, } = props;
+    return <div/>
+}
 
 
 export default RepoSelector

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { graphql } from 'babel-plugin-relay/macro';
 import {
@@ -10,10 +10,11 @@ import {
 import RelayEnvironment from './RelayEnvironment';
 import CommitData from './CommitData';
 import CommitWordcloud from './CommitWordcloud';
+import RepoSelector from './components/RepoSelector';
 
 const { Suspense } = React;
 const variables = {
-  "name": "sweaterWeather",
+  "name": "",
   "owner": "bendelonlee",
   "authorId": "MDQ6VXNlcjQxNjQ1Nzcx",
 }
@@ -48,9 +49,7 @@ query AppCommitsQuery($name: String!, $owner: String!, $authorId: ID!, $after: S
 
 // Immediately load the query as our app starts. For a real app, we'd move this
 // into our routing configuration, preloading data as we transition to new routes.
-const preloadedQuery = loadQuery(RelayEnvironment, fooQuery, 
-  variables,
-);
+
 
 // Inner component that reads the preloaded query results via `usePreloadedQuery()`.
 // This works as follows:
@@ -61,7 +60,13 @@ const preloadedQuery = loadQuery(RelayEnvironment, fooQuery,
 // - If the query failed, it throws the failure error. For simplicity we aren't
 //   handling the failure case here.
 function App(props: any) {
-  const data : any = usePreloadedQuery(fooQuery, props.preloadedQuery,)
+
+  
+  const [repoName, setRepoName] = useState('sweaterWeather')
+  const preloadedQuery = loadQuery(RelayEnvironment, fooQuery, 
+    {...variables, name: repoName},
+  );
+  const data : any = usePreloadedQuery(fooQuery, preloadedQuery)
   const commits = data.repository.defaultBranchRef.target.history.nodes;
   const commitData = new CommitData();
   commitData.addCommits(commits, 'fooId', data.repository.defaultBranchRef.target.history.pageInfo.endCursor)
@@ -71,6 +76,7 @@ function App(props: any) {
   console.log(commitData.wordFrequencies);
   return (
     <div className="App">
+      <RepoSelector repoName={repoName} setRepoName={setRepoName}/>
       <CommitWordcloud commitData={commitData}/>
     </div>
   );
@@ -85,7 +91,7 @@ function AppRoot(props: any) {
   return (
     <RelayEnvironmentProvider environment={RelayEnvironment}>
       <Suspense fallback={'Loading...'}>
-        <App preloadedQuery={preloadedQuery} />
+        <App />
       </Suspense>
     </RelayEnvironmentProvider>
   );
