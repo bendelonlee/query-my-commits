@@ -5,7 +5,7 @@ export default function RepoCheckboxItem(props: {repo: any, setSelectedRepos: Di
 
     }
     
-    return <div>
+    return <div className="repo-checkbox-item">
         <label>
             <input
                 type="checkbox"

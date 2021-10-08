@@ -41,3 +41,14 @@
     transform: rotate(360deg);
   }
 }
+
+.repo-selector {
+  max-height: 100vh;
+  overflow: scroll;
+  background: bisque;
+  width: 320px;
+}
+
+.repo-checkbox-item {
+  height: 30px;
+}

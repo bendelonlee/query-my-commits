@@ -67,7 +67,7 @@ function InnerComponent(props: Props): JSX.Element {
         setRepoName(event.target.value)
     }
 
-    return <div onChange={onRepoChange}>
+    return <div onChange={onRepoChange} className='repo-selector'>
         {repos?.map((repo) => {
             return <RepoCheckboxItem
                 repo={repo}
