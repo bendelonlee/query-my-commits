@@ -3,13 +3,13 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type AppCommitsQueryVariables = {
+export type CommitWordcloudCommitsQueryVariables = {
     name: string;
     owner: string;
     authorId: string;
     after?: string | null;
 };
-export type AppCommitsQueryResponse = {
+export type CommitWordcloudCommitsQueryResponse = {
     readonly repository: {
         readonly defaultBranchRef: {
             readonly target: {
@@ -30,15 +30,15 @@ export type AppCommitsQueryResponse = {
         } | null;
     } | null;
 };
-export type AppCommitsQuery = {
-    readonly response: AppCommitsQueryResponse;
-    readonly variables: AppCommitsQueryVariables;
+export type CommitWordcloudCommitsQuery = {
+    readonly response: CommitWordcloudCommitsQueryResponse;
+    readonly variables: CommitWordcloudCommitsQueryVariables;
 };
 
 
 
 /*
-query AppCommitsQuery(
+query CommitWordcloudCommitsQuery(
   $name: String!
   $owner: String!
   $authorId: ID!
@@ -201,7 +201,7 @@ return {
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "AppCommitsQuery",
+    "name": "CommitWordcloudCommitsQuery",
     "selections": [
       {
         "alias": null,
@@ -283,7 +283,7 @@ return {
       (v0/*: any*/)
     ],
     "kind": "Operation",
-    "name": "AppCommitsQuery",
+    "name": "CommitWordcloudCommitsQuery",
     "selections": [
       {
         "alias": null,
@@ -366,14 +366,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "9eb5a613f54baa77ae49595233a7a151",
+    "cacheID": "25422b11b1e1b67a77afae0617ff81f3",
     "id": null,
     "metadata": {},
-    "name": "AppCommitsQuery",
+    "name": "CommitWordcloudCommitsQuery",
     "operationKind": "query",
-    "text": "query AppCommitsQuery(\n  $name: String!\n  $owner: String!\n  $authorId: ID!\n  $after: String\n) {\n  repository(name: $name, owner: $owner) {\n    defaultBranchRef {\n      target {\n        __typename\n        ... on Commit {\n          history(author: {id: $authorId}, after: $after) {\n            nodes {\n              message\n              messageBody\n              oid\n              id\n            }\n            pageInfo {\n              hasNextPage\n              hasPreviousPage\n              endCursor\n            }\n            totalCount\n          }\n        }\n        id\n      }\n      id\n    }\n    id\n  }\n}\n"
+    "text": "query CommitWordcloudCommitsQuery(\n  $name: String!\n  $owner: String!\n  $authorId: ID!\n  $after: String\n) {\n  repository(name: $name, owner: $owner) {\n    defaultBranchRef {\n      target {\n        __typename\n        ... on Commit {\n          history(author: {id: $authorId}, after: $after) {\n            nodes {\n              message\n              messageBody\n              oid\n              id\n            }\n            pageInfo {\n              hasNextPage\n              hasPreviousPage\n              endCursor\n            }\n            totalCount\n          }\n        }\n        id\n      }\n      id\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'cbba40dc915464155f44b2ef379c4c88';
+(node as any).hash = 'ccc4ecf5afb215ec166ce6b1c5975044';
 export default node;

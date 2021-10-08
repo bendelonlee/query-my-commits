@@ -13,38 +13,8 @@ import CommitWordcloud from './CommitWordcloud';
 import RepoSelector from './components/RepoSelector';
 
 const { Suspense } = React;
-const variables = {
-  "name": "",
-  "owner": "bendelonlee",
-  "authorId": "MDQ6VXNlcjQxNjQ1Nzcx",
-}
+
 // Define a query
-const repoCommitsQuery = graphql`
-query AppCommitsQuery($name: String!, $owner: String!, $authorId: ID!, $after: String) {
-  repository(name: $name, owner: $owner) {
-    defaultBranchRef {
-      target {
-        ... on Commit {
-          history(author: {id: $authorId}, after: $after) {
-            nodes {
-              message
-              messageBody
-              oid
-            }
-            pageInfo {
-                
-              hasNextPage
-              hasPreviousPage
-              endCursor
-            }
-            totalCount
-          }
-        }
-      }
-    }
-  }
-}
-`
 
 
 // Immediately load the query as our app starts. For a real app, we'd move this
@@ -65,12 +35,6 @@ function App(props: any) {
   const [selectedRepos, setSelectedRepos] = useState(new Set<string>(['backend_prework']))
   const [commitData, setCommitData] = useState(new CommitData())
   const [lastSelectedRepo, setLastSelectedRepo] = useState('backend_prework')
-  const preloadedQuery = loadQuery(RelayEnvironment, repoCommitsQuery, 
-    {...variables, name: lastSelectedRepo},
-  );
-  const data : any = usePreloadedQuery(repoCommitsQuery, preloadedQuery)
-  const commits = data.repository.defaultBranchRef.target.history.nodes;
-  commitData.addCommits(commits, 'fooId', data.repository.defaultBranchRef.target.history.pageInfo.endCursor)
   
   // const commitData = CommitData.fromStorage();
   
@@ -78,7 +42,7 @@ function App(props: any) {
   return (
     <div className="App">
       <RepoSelector selectedRepos={selectedRepos} setSelectedRepos={setSelectedRepos} setLastSelectedRepo={setLastSelectedRepo}/>
-      <CommitWordcloud commitData={commitData}/>
+      <CommitWordcloud commitData={commitData} lastSelectedRepo={lastSelectedRepo}/>
     </div>
   );
 }

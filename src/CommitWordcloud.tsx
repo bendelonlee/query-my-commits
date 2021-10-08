@@ -1,8 +1,43 @@
 import CommitData from "./CommitData";
 import ReactWordcloud, { Scale } from 'react-wordcloud';
-
+import {
+  RelayEnvironmentProvider,
+  loadQuery,
+  usePreloadedQuery,
+  
+} from 'react-relay/hooks';
 import internal from "stream";
 import useWindowDimensions from "./hooks/useWindowDimensions";
+import RelayEnvironment from "./RelayEnvironment";
+import { Suspense } from "react";
+import { graphql } from "babel-plugin-relay/macro";
+
+const repoCommitsQuery = graphql`
+query CommitWordcloudCommitsQuery($name: String!, $owner: String!, $authorId: ID!, $after: String) {
+  repository(name: $name, owner: $owner) {
+    defaultBranchRef {
+      target {
+        ... on Commit {
+          history(author: {id: $authorId}, after: $after) {
+            nodes {
+              message
+              messageBody
+              oid
+            }
+            pageInfo {
+                
+              hasNextPage
+              hasPreviousPage
+              endCursor
+            }
+            totalCount
+          }
+        }
+      }
+    }
+  }
+}
+`
 
 const callbacks = {
     
@@ -17,7 +52,14 @@ const callbacks = {
   };
   const size: [number, number] = [1600, 1000];
    
-export default function CommitWordcloud(props: {commitData: CommitData}) {
+function CommitWordcloud(props: {commitData: CommitData, lastSelectedRepo: string}) {
+    const preloadedQuery = loadQuery(RelayEnvironment, repoCommitsQuery, 
+      {...variables, name: props.lastSelectedRepo},
+    );
+    const data : any = usePreloadedQuery(repoCommitsQuery, preloadedQuery)
+    const commits = data.repository.defaultBranchRef.target.history.nodes;
+    props.commitData.addCommits(commits, 'fooId', data.repository.defaultBranchRef.target.history.pageInfo.endCursor)
+  
     const {height, width} = useWindowDimensions();
     return (
       <ReactWordcloud
@@ -39,10 +81,23 @@ export default function CommitWordcloud(props: {commitData: CommitData}) {
     );
   }
 
+const variables = {
+    "name": "",
+    "owner": "bendelonlee",
+    "authorId": "MDQ6VXNlcjQxNjQ1Nzcx",
+}
 
 
 interface ReactWordCloudOptions {
   
   rotations: number,
   rotationAngles: [number, number]
+}
+
+export default function ComponentRoot(props: {commitData: CommitData, lastSelectedRepo: string}): JSX.Element{
+  return <RelayEnvironmentProvider environment={RelayEnvironment}>
+      <Suspense fallback={'Loading...'}>
+        <CommitWordcloud {...props}/>
+      </Suspense>
+    </RelayEnvironmentProvider>
 }
