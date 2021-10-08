@@ -6,11 +6,11 @@ import RepoCheckboxItem from "./RepoCheckboxItem"
 import { RepoSelectorQuery, RepoSelectorQueryResponse } from "./__generated__/RepoSelectorQuery.graphql"
 
 export interface RepoSelectorProps {
-    repoName: string;
-    setRepoName: Dispatch<SetStateAction<string>>;
+    selectedRepos: Set<string>;
+    setSelectedRepos: Dispatch<SetStateAction<Set<string>>>;
 }
 
-function RepoSelector({repoName, setRepoName}: RepoSelectorProps){
+function RepoSelector({selectedRepos, setSelectedRepos}: RepoSelectorProps){
     return <div>
         <QueryRenderer<RepoSelectorQuery>
             environment={RelayEnvironment}
@@ -18,7 +18,12 @@ function RepoSelector({repoName, setRepoName}: RepoSelectorProps){
             variables={{}}
             render={({ error, props: response, retry }) => {
                 return (
-                    <InnerComponent loadingError={error} response={response} refetch={retry} setRepoName={setRepoName} />
+                    <InnerComponent 
+                        loadingError={error} 
+                        response={response} 
+                        refetch={retry} 
+                        setSelectedRepos={setSelectedRepos} 
+                        selectedRepos={selectedRepos}/>
                 );
             }}
         />
@@ -54,25 +59,22 @@ interface Props {
     response: Nullable<RepoSelectorQueryResponse>;
     loadingError: Nullable<Error>;
     refetch?: Nullable<() => void>;
-    setRepoName: Dispatch<SetStateAction<string>>;
+    selectedRepos: Set<string>,
+    setSelectedRepos: Dispatch<SetStateAction<Set<string>>>
 }
 type Nullable<T> = null | T;
 
 
 function InnerComponent(props: Props): JSX.Element {
-    const { response, loadingError, refetch, setRepoName } = props;
+    const { response, loadingError, refetch, setSelectedRepos } = props;
     const repos = response?.viewer.repositories.nodes
-    const [ selectedRepos, setSelectedRepos ] = useState(new Set<string>())
-    const onRepoChange = (event: any) => {
-        setRepoName(event.target.value)
-    }
 
-    return <div onChange={onRepoChange} className='repo-selector'>
+    return <div className='repo-selector'>
         {repos?.map((repo) => {
             return <RepoCheckboxItem
                 repo={repo}
-                selectedRepos={selectedRepos}
-                setSelectedRepos={setSelectedRepos}
+                selectedRepos={props.selectedRepos}
+                setSelectedRepos={props.setSelectedRepos}
             />
         })}
     </div>

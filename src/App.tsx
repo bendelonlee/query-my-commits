@@ -62,9 +62,9 @@ query AppCommitsQuery($name: String!, $owner: String!, $authorId: ID!, $after: S
 function App(props: any) {
 
   
-  const [repoName, setRepoName] = useState('sweaterWeather')
+  const [selectedRepos, setSelectedRepos] = useState(new Set<string>(['sweaterWeather']))
   const preloadedQuery = loadQuery(RelayEnvironment, fooQuery, 
-    {...variables, name: repoName},
+    {...variables, name: 'sweaterWeather'},
   );
   const data : any = usePreloadedQuery(fooQuery, preloadedQuery)
   const commits = data.repository.defaultBranchRef.target.history.nodes;
@@ -76,7 +76,7 @@ function App(props: any) {
   console.log(commitData.wordFrequencies);
   return (
     <div className="App">
-      <RepoSelector repoName={repoName} setRepoName={setRepoName}/>
+      <RepoSelector selectedRepos={selectedRepos} setSelectedRepos={setSelectedRepos}/>
       <CommitWordcloud commitData={commitData}/>
     </div>
   );
