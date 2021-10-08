@@ -33,7 +33,7 @@ export default function CommitWordcloud(props: {commitData: CommitData}) {
           fontFamily: 'monospace',
           fontSizes: [10, 200]
         }}
-        size={[width, height]}
+        size={[width - 280, height]}
         words={props.commitData.toWordCloudArray()}
       />
     );
