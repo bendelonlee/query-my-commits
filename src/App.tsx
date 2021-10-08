@@ -19,7 +19,7 @@ const variables = {
   "authorId": "MDQ6VXNlcjQxNjQ1Nzcx",
 }
 // Define a query
-const fooQuery = graphql`
+const repoCommitsQuery = graphql`
 query AppCommitsQuery($name: String!, $owner: String!, $authorId: ID!, $after: String) {
   repository(name: $name, owner: $owner) {
     defaultBranchRef {
@@ -62,13 +62,14 @@ query AppCommitsQuery($name: String!, $owner: String!, $authorId: ID!, $after: S
 function App(props: any) {
 
   
-  const [selectedRepos, setSelectedRepos] = useState(new Set<string>(['sweaterWeather']))
-  const preloadedQuery = loadQuery(RelayEnvironment, fooQuery, 
-    {...variables, name: 'sweaterWeather'},
+  const [selectedRepos, setSelectedRepos] = useState(new Set<string>(['backend_prework']))
+  const [commitData, setCommitData] = useState(new CommitData())
+  const [lastSelectedRepo, setLastSelectedRepo] = useState('backend_prework')
+  const preloadedQuery = loadQuery(RelayEnvironment, repoCommitsQuery, 
+    {...variables, name: lastSelectedRepo},
   );
-  const data : any = usePreloadedQuery(fooQuery, preloadedQuery)
+  const data : any = usePreloadedQuery(repoCommitsQuery, preloadedQuery)
   const commits = data.repository.defaultBranchRef.target.history.nodes;
-  const commitData = new CommitData();
   commitData.addCommits(commits, 'fooId', data.repository.defaultBranchRef.target.history.pageInfo.endCursor)
   
   // const commitData = CommitData.fromStorage();
@@ -76,7 +77,7 @@ function App(props: any) {
   console.log(commitData.wordFrequencies);
   return (
     <div className="App">
-      <RepoSelector selectedRepos={selectedRepos} setSelectedRepos={setSelectedRepos}/>
+      <RepoSelector selectedRepos={selectedRepos} setSelectedRepos={setSelectedRepos} setLastSelectedRepo={setLastSelectedRepo}/>
       <CommitWordcloud commitData={commitData}/>
     </div>
   );

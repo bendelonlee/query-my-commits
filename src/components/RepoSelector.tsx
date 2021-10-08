@@ -8,9 +8,10 @@ import { RepoSelectorQuery, RepoSelectorQueryResponse } from "./__generated__/Re
 export interface RepoSelectorProps {
     selectedRepos: Set<string>;
     setSelectedRepos: Dispatch<SetStateAction<Set<string>>>;
+    setLastSelectedRepo: Dispatch<SetStateAction<string>>;
 }
 
-function RepoSelector({selectedRepos, setSelectedRepos}: RepoSelectorProps){
+function RepoSelector({selectedRepos, setSelectedRepos, setLastSelectedRepo}: RepoSelectorProps){
     return <div>
         <QueryRenderer<RepoSelectorQuery>
             environment={RelayEnvironment}
@@ -22,6 +23,7 @@ function RepoSelector({selectedRepos, setSelectedRepos}: RepoSelectorProps){
                         loadingError={error} 
                         response={response} 
                         refetch={retry} 
+                        setLastSelectedRepo={setLastSelectedRepo}
                         setSelectedRepos={setSelectedRepos} 
                         selectedRepos={selectedRepos}/>
                 );
@@ -61,6 +63,7 @@ interface Props {
     refetch?: Nullable<() => void>;
     selectedRepos: Set<string>,
     setSelectedRepos: Dispatch<SetStateAction<Set<string>>>
+    setLastSelectedRepo: Dispatch<SetStateAction<string>>;
 }
 type Nullable<T> = null | T;
 
@@ -73,6 +76,7 @@ function InnerComponent(props: Props): JSX.Element {
         {repos?.map((repo) => {
             return <RepoCheckboxItem
                 repo={repo}
+                setLastSelectedRepo={props.setLastSelectedRepo}
                 selectedRepos={props.selectedRepos}
                 setSelectedRepos={props.setSelectedRepos}
             />
