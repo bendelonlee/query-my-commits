@@ -1,7 +1,8 @@
 import { graphql } from "babel-plugin-relay/macro"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import { QueryRenderer } from "react-relay"
 import RelayEnvironment from "../RelayEnvironment"
+import RepoCheckboxItem from "./RepoCheckboxItem"
 import { RepoSelectorQuery, RepoSelectorQueryResponse } from "./__generated__/RepoSelectorQuery.graphql"
 
 export interface RepoSelectorProps {
@@ -61,16 +62,20 @@ type Nullable<T> = null | T;
 function InnerComponent(props: Props): JSX.Element {
     const { response, loadingError, refetch, setRepoName } = props;
     const repos = response?.viewer.repositories.nodes
-
+    const [ selectedRepos, setSelectedRepos ] = useState(new Set<string>())
     const onRepoChange = (event: any) => {
         setRepoName(event.target.value)
     }
 
-    return <select onChange={onRepoChange}>
+    return <div onChange={onRepoChange}>
         {repos?.map((repo) => {
-            return <option>{repo!.name}</option>
+            return <RepoCheckboxItem
+                repo={repo}
+                selectedRepos={selectedRepos}
+                setSelectedRepos={setSelectedRepos}
+            />
         })}
-    </select>
+    </div>
 
 }
 
