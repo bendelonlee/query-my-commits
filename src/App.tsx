@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { graphql } from 'babel-plugin-relay/macro';
 import {
@@ -29,12 +29,15 @@ const { Suspense } = React;
 //   fallback.
 // - If the query failed, it throws the failure error. For simplicity we aren't
 //   handling the failure case here.
-function App(props: any) {
-
-  
-  const [selectedRepos, setSelectedRepos] = useState(new Set<string>(['backend_prework']))
+function App(props: any) {  
+  const [selectedRepos, setSelectedRepos] = useState(CommitData.initialSelectedRepos)
   const [commitData, setCommitData] = useState(new CommitData())
   const [lastSelectedRepo, setLastSelectedRepo] = useState('backend_prework')
+  commitData.setSelectedRepos(selectedRepos)
+
+  useEffect(() => {
+    commitData.setSelectedRepos(selectedRepos)
+  }, [selectedRepos])
   
   // const commitData = CommitData.fromStorage();
   
