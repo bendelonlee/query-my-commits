@@ -58,8 +58,10 @@ function CommitWordcloud(props: {commitData: CommitData, lastSelectedRepo: strin
     );
     const data : any = usePreloadedQuery(repoCommitsQuery, preloadedQuery)
     if(!props.commitData.addedRepoNames.has(props.lastSelectedRepo)){
-      const commits = data.repository.defaultBranchRef.target.history.nodes;
-      props.commitData.addCommits(commits, props.lastSelectedRepo, data.repository.defaultBranchRef.target.history.pageInfo.endCursor)
+      const commits = data.repository?.defaultBranchRef?.target.history.nodes;
+      if(commits != null){
+        props.commitData.addCommits(commits, props.lastSelectedRepo, data.repository.defaultBranchRef.target.history.pageInfo.endCursor)
+      }
     }
     
     const {height, width} = useWindowDimensions();
