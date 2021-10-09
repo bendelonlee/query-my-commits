@@ -1,3 +1,12 @@
+# Description
+
+This is a simple project I created to get more practice with relay, graphql, and typescript.
+
+It shows my public repos, and a word cloud made from my commit messages on them:
+
+![image](https://user-images.githubusercontent.com/41645771/136664585-5858cdae-7450-4b2b-bb1a-69dcb2591164.png)
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
